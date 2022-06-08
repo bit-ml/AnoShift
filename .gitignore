@@ -1,0 +1,13 @@
+.vector_cache
+.vscode
+__pycache__
+language_models/__pycache__
+language_models/weights
+resources
+datasets
+saved_models
+wandb
+runs
+saved_tokenizers
+outdir
+.ipynb_checkpoints
