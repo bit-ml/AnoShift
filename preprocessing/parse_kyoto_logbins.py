@@ -98,16 +98,16 @@ def parse_dataset():
 
             if (idx_month + 1) == 6:
                 df_yr.to_csv(
-                    f"./datasets/preprocessed/kyoto-2016/labeled/{prefix}kyoto-2016_{ds_year}_p1.csv")
+                    f"./datasets/preprocessed/{prefix}kyoto-2016_{ds_year}_p1.csv")
                 del df_yr
                 df_yr = pd.DataFrame()
             if (idx_month + 1) == 12:
                 df_yr.to_csv(
-                    f"./datasets/preprocessed/kyoto-2016/labeled/{prefix}kyoto-2016_{ds_year}_p2.csv")
+                    f"./datasets/preprocessed/{prefix}kyoto-2016_{ds_year}_p2.csv")
 
         if ds_year == "2006":
             df_yr.to_csv(
-                f"./datasets/preprocessed/kyoto-2016/labeled/{prefix}kyoto-2016_{ds_year}.csv")
+                f"./datasets/preprocessed/{prefix}kyoto-2016_{ds_year}.csv")
         del df_yr
 
     return df
@@ -116,7 +116,7 @@ def parse_dataset():
 def split_iid(p_test=0.1, random_state=10):
     for year in ds_years:
         df_year = pd.read_pickle(
-            f"./datasets/preprocessed/kyoto-2016/{prefix}kyoto-2016_{year}.pkl")
+            f"./datasets/preprocessed/{prefix}kyoto-2016_{year}.pkl")
         df_year_inlier = df_year[df_year[14] == "1"]
         df_year_outlier_known = df_year[df_year[14] == "-1"]
         df_year_outlier_unknown = df_year[df_year[14] == "-2"]
@@ -142,8 +142,8 @@ def split_iid(p_test=0.1, random_state=10):
         df_year_train = pd.concat(
             [df_year, df_year_test]).drop_duplicates(keep=False)
 
-        train_path = f"./datasets/preprocessed/kyoto-2016/{prefix}iid_kyoto-2016_{year}_train.pkl"
-        test_path = f"./datasets/preprocessed/kyoto-2016/{prefix}iid_kyoto-2016_{year}_test.pkl"
+        train_path = f"./datasets/preprocessed/{prefix}iid_kyoto-2016_{year}_train.pkl"
+        test_path = f"./datasets/preprocessed/{prefix}iid_kyoto-2016_{year}_test.pkl"
 
         print("Saving train subset to ", train_path, df_year_train.shape)
         df_year_train.to_pickle(train_path)
