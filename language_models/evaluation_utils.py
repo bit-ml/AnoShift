@@ -1,42 +1,13 @@
-# import nltk
 import torch
 import numpy as np
 import random
 import math
-import json
 
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import precision_recall_curve, auc
 from tqdm import tqdm
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
-"""
-def anomaly_score_lstm(model, text, corpus):
-    # initial LSTM stage
-    model.eval()
-    state_h, state_c = model.zero_state(1)
-    tokens = nltk.word_tokenize(text)
-    anom_score = 0
-
-    for idx, token in enumerate(tokens[:-1]):
-        next_token = tokens[idx + 1]
-        word_idx = corpus.word_to_ix.get(token.lower(), 0)
-        next_word_idx = corpus.word_to_ix.get(next_token.lower(), 0)
-
-        pred, (state_h, state_c) = model(
-            torch.tensor([word_idx]).to(corpus.device).view(1, -1),
-            (state_h, state_c),
-        )
-
-        p = torch.nn.functional.softmax(
-            pred[0][0], dim=0).detach().cpu().numpy()
-        pred_prob = p[next_word_idx]
-        anom_score += 1.0 / pred_prob
-
-    return anom_score / len(tokens)
-"""
 
 
 def anomaly_score_bert(model, text, tokenizer, num_repeats=15):
@@ -99,17 +70,8 @@ def eval_rocauc_ds(model, ds_test_name, ds_test, bs_eval, tokenizer):
         for step in tqdm(range(num_steps)):
             examples = ds_cls[step * bs_eval: (step + 1) * bs_eval]
             num_examples = len(examples["input_ids"])
-            #example_ids = examples['idx']
-            #example_service = examples['service']
-
-            # example_features = [examples[str(i)] for i in range(14)]
-            # example_label1 = examples['label1']
-            # example_label2 = examples['label2']
-            # example_label3 = examples['label3']
-            # example_connection = examples['connection']
 
             if "count" in examples.keys():
-                # occurrences = np.array([int(c) for c in examples["count"]])
                 occurrences = np.array([1, ] * num_examples)
             else:
                 occurrences = np.array([1, ] * num_examples)
@@ -129,13 +91,6 @@ def eval_rocauc_ds(model, ds_test_name, ds_test, bs_eval, tokenizer):
 
             for i in range(num_examples):
                 y_scores += [anomaly_score_lines[i], ] * occurrences[i]
-
-                #y_scores_ids[ex_id] = [anomaly_score_lines[i], true_label]
-                # example_service[i], ]   example_label1[i], example_label2[i], example_label3[i], example_connection[i]]
-
-                # ex_id = example_ids[i]
-                # for fidx in range(14):
-                #    y_scores_ids[ex_id] += [example_features[fidx][i], ]
 
             anomaly_score_lines = np.array(anomaly_score_lines)
             class_scores[cls] += (occurrences *
