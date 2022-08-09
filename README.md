@@ -40,6 +40,8 @@ mkdir datasets
 mv AnoShift.zip datasets
 
 unzip datasets/AnoShift.zip -d datasets/
+
+rm datasets/AnoShift.zip
 ```
 
 ## Prepare environment
