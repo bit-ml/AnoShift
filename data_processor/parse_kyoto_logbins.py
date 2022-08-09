@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 
-ds_path = "./datasets/kyoto-2016/"
+ds_path = "./datasets/kyoto-2016/"  # replace with the location of your raw data
 ds_years = [
     "2006",
     "2007",
@@ -29,15 +29,15 @@ col_bounds = {
     0: {"min": 0.0, "max": 86397.394358},
     2: {"min": 0.0, "max": 4294967295.0},
     3: {"min": 0.0, "max": 4294967295.0},
-    4: {"min": 0.0, "max": 100.0},
-    5: {"min": 0.0, "max": 1.0},
-    6: {"min": 0.0, "max": 1.0},
-    7: {"min": 0.0, "max": 1.0},
-    8: {"min": 0.0, "max": 100.0},
-    9: {"min": 0.0, "max": 100.0},
-    10: {"min": 0.0, "max": 1.0},
-    11: {"min": 0.0, "max": 1.0},
-    12: {"min": 0.0, "max": 1.0},
+    # 4: {"min": 0.0, "max": 100.0},
+    # 5: {"min": 0.0, "max": 1.0},
+    # 6: {"min": 0.0, "max": 1.0},
+    # 7: {"min": 0.0, "max": 1.0},
+    # 8: {"min": 0.0, "max": 100.0},
+    # 9: {"min": 0.0, "max": 100.0},
+    # 10: {"min": 0.0, "max": 1.0},
+    # 11: {"min": 0.0, "max": 1.0},
+    # 12: {"min": 0.0, "max": 1.0},
 }
 
 dups = True
@@ -77,18 +77,17 @@ def parse_dataset():
                     ds_entries += line_items
             df_yr_mt = pd.DataFrame(ds_entries)
 
-            for col in cols:
-                if col in [0, 2, 3]:
-                    num_bins = len(bins)
-                    bin_names = [
-                        "c" + str(col).replace(" ", "") + str(idx)
-                        for idx in range(num_bins - 1)
-                    ]
-                    df_yr_mt[col] = pd.cut(
-                        df_yr_mt[col].astype(float),
-                        bins=bins,
-                        labels=bin_names,
-                    ).astype(str)
+            for col in [0, 2, 3]:
+                num_bins = len(bins)
+                bin_names = [
+                    "c" + str(col).replace(" ", "") + str(idx)
+                    for idx in range(num_bins - 1)
+                ]
+                df_yr_mt[col] = pd.cut(
+                    df_yr_mt[col].astype(float),
+                    bins=bins,
+                    labels=bin_names,
+                ).astype(str)
 
             df_yr = pd.concat([df_yr, df_yr_mt])
             del df_yr_mt
@@ -96,18 +95,18 @@ def parse_dataset():
             if not dups:
                 df_yr = df_yr.drop_duplicates(keep=False)
 
-            if (idx_month + 1) == 6:
-                df_yr.to_csv(
-                    f"./datasets/preprocessed/{prefix}kyoto-2016_{ds_year}_p1.csv")
+            if idx_month == 5:
+                df_yr.astype(str).to_parquet(
+                    ds_path + f"{prefix}kyoto-2016_{ds_year}_p1.parquet")
                 del df_yr
                 df_yr = pd.DataFrame()
-            if (idx_month + 1) == 12:
-                df_yr.to_csv(
-                    f"./datasets/preprocessed/{prefix}kyoto-2016_{ds_year}_p2.csv")
+            if idx_month == 11:
+                df_yr.astype(str).to_parquet(
+                    ds_path + f"{prefix}kyoto-2016_{ds_year}_p2.parquet")
 
         if ds_year == "2006":
-            df_yr.to_csv(
-                f"./datasets/preprocessed/{prefix}kyoto-2016_{ds_year}.csv")
+            df_yr.astype(str).to_parquet(
+                ds_path + f"{prefix}kyoto-2016_{ds_year}.parquet")
         del df_yr
 
     return df
@@ -115,8 +114,8 @@ def parse_dataset():
 
 def split_iid(p_test=0.1, random_state=10):
     for year in ds_years:
-        df_year = pd.read_pickle(
-            f"./datasets/preprocessed/{prefix}kyoto-2016_{year}.pkl")
+        df_year = pd.read_parquet(
+            ds_path + f"{prefix}kyoto-2016_{year}.parquet")
         df_year_inlier = df_year[df_year[14] == "1"]
         df_year_outlier_known = df_year[df_year[14] == "-1"]
         df_year_outlier_unknown = df_year[df_year[14] == "-2"]
@@ -142,13 +141,13 @@ def split_iid(p_test=0.1, random_state=10):
         df_year_train = pd.concat(
             [df_year, df_year_test]).drop_duplicates(keep=False)
 
-        train_path = f"./datasets/preprocessed/{prefix}iid_kyoto-2016_{year}_train.pkl"
-        test_path = f"./datasets/preprocessed/{prefix}iid_kyoto-2016_{year}_test.pkl"
+        train_path = ds_path + f"{prefix}iid_kyoto-2016_{year}_train.parquet"
+        test_path = ds_path + f"{prefix}iid_kyoto-2016_{year}_test.parquet"
 
         print("Saving train subset to ", train_path, df_year_train.shape)
-        df_year_train.to_pickle(train_path)
+        df_year_train.to_parquet(train_path)
         print("Saving test subset to ", test_path, df_year_test.shape)
-        df_year_test.to_pickle(test_path)
+        df_year_test.to_parquet(test_path)
 
 
 parse_dataset()
