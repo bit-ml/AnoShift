@@ -7,8 +7,7 @@ ds_cols = ["input_ids", "idx", "service", "token_type_ids",
 
 
 def tokenize_function(examples, tokenizer, block_size):
-    ex_cpy = {key: value for key, value in examples.items() if key not in [
-        'idx', 'count', 'service', 'protocol', 'label1', 'label2', 'label3']}
+    ex_cpy = {key: value for key, value in examples.items() if key not in ['idx', ]}
 
     tokenized = {"text": [" ".join(v)
                           for v in list(zip(*ex_cpy.values()))]}
