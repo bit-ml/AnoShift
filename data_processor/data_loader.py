@@ -28,6 +28,7 @@ def load_kyoto_principal(contamination=0.0, experiment_type="", experiment_year=
     """
 
     df_train_set = pd.DataFrame()
+    df_iid = pd.DataFrame()
     df_test = []
 
     label_col_name = label_col_names["kyoto-2016"]
@@ -39,12 +40,12 @@ def load_kyoto_principal(contamination=0.0, experiment_type="", experiment_year=
         train_st = 2006
         train_end = 2011
         train_years = [str(y)
-                       for y in range(train_st, train_end + 1)]
+                       for y in range(train_st, train_end)]
         ret_train_ds_name = f"principal_{experiment_type}_trainon_{train_st}-{train_end}"
         if experiment_year != "":
             test_years = [experiment_year, ]
         else:
-            test_years = range(2012, 2015 + 1)
+            test_years = range(train_end, 2015 + 1)
     elif experiment_type == "distil" or experiment_type == "finetune":
         train_years = [str(y) for y in range(
             int(experiment_year), int(experiment_year) + 1)]
@@ -84,9 +85,21 @@ def load_kyoto_principal(contamination=0.0, experiment_type="", experiment_year=
 
         print(f"Train {train_year} shape {df_train_set.shape}")
 
+        # Load a separate portion of train data to form the IID Split
+        iid_year_path = f"./datasets/Kyoto-2016_AnoShift/{ds_size}/{train_year}_{ds_size}_valid.parquet"
+        print("Loading IID subset from ", iid_year_path)
+        df_iid_year = pd.read_parquet(iid_year_path)
+
+        df_iid_year.drop(columns=list(
+            (set(df_iid_year.columns) - set(cols))), inplace=True)
+
+        df_iid = pd.concat([df_iid, df_iid_year])
+        del df_iid_year
+
     gc.collect()
     df_train = [(ret_train_ds_name, df_train_set)]
 
+    # Load the rest of the data as test sets (NEAR and FAR)
     for test_year in test_years:
         test_year_path = f"./datasets/Kyoto-2016_AnoShift/{ds_size}/{test_year}_{ds_size}.parquet"
         print("Loading test set:", test_year_path)
@@ -96,6 +109,7 @@ def load_kyoto_principal(contamination=0.0, experiment_type="", experiment_year=
         df_test.append((test_year, df_test_year))
 
     gc.collect()
+    df_test = [('IID', df_iid), ] + df_test
 
     return df_train, df_test
 

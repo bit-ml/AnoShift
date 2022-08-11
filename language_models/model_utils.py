@@ -17,7 +17,9 @@ eval_epochs = [5, 10]
 
 def configure_model(architecture, pretrained, small, vocab_size, tokenizer, embed_size, size=1):
     """
-    Configure a BERT model for a given configuration
+    Configure a model for a given configuration
+    Architecture can be BERT or Electra
+    Use small (bool) and size (integer) for model size adjustment
     """
     if architecture == "bert":
         if pretrained:
@@ -32,10 +34,6 @@ def configure_model(architecture, pretrained, small, vocab_size, tokenizer, embe
                     num_attention_heads=6 * size,
                     hidden_size=120 * size,
                     max_position_embeddings=embed_size,
-                    # hidden_dropout_prob=0.3,
-                    # attention_probs_dropout_prob=0.3,
-                    # classifier_dropout=0.3,
-                    # initializer_range=0.02,
                     vocab_size=vocab_size,
                 )
             else:
@@ -62,7 +60,7 @@ def configure_model(architecture, pretrained, small, vocab_size, tokenizer, embe
 
 
 class EvalCallback(TrainerCallback):
-    "Callback that evaluates ROCAUC score after every epoch"
+    "Callback that evaluates AUC scores after every epoch and saves the checkpoints"
 
     def __init__(
         self,
@@ -122,6 +120,11 @@ def distil_model(
     temperature=4,
     alpha=0.9
 ):
+    """
+    Train stuednt model in distillation mode
+    Define objective function as a combination of CrossEntropy
+         and Kullback-Leibler divergence loss (with Teacher predictions)
+    """
     final_model_path = save_model_path + "_final"
     data_collator = DataCollatorForLanguageModeling(tokenizer)
 
@@ -211,7 +214,11 @@ def train_model(
     num_epochs,
     tb_writer,
 ):
-
+    """
+    Start a train session for a given model on a train set.
+    This is the classical CrossEntropy training regime,
+        used for IID training (a new model) and finetune (a saved checkpoint) on a train set
+    """
     data_collator = DataCollatorForLanguageModeling(
         tokenizer, mlm=True, mlm_probability=0.15)
     training_args = TrainingArguments(

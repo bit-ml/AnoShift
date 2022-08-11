@@ -15,6 +15,11 @@ tokenizers_dir = "./saved_tokenizers/"
 def configure_tokenizer(
     byte_level_tokenization, dfs_train, ds_name, tokenizer_name="customtokenizer", preload=True
 ):
+    """
+    Configure a Byte Level tokenizer or Word level tokenizer
+    For Kyoto-2016, as the vocabulary size is fixed due to binning,
+        it is recommended that the tokenizer is presaved and preloaded
+    """
     if preload and ds_name == "kyoto-2016":
         print("Loading presaved tokenizer")
         tokenizer_path = tokenizers_dir + ds_name + ".json"
