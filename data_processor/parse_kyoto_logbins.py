@@ -150,7 +150,6 @@ def split_iid(p_test=0.1, random_state=10):
         df_year_test.to_parquet(test_path)
 
 
-parse_dataset()
-
 if __name__ == '__main__':
     parse_dataset()
+    split_iid()
