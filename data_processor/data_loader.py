@@ -85,16 +85,17 @@ def load_kyoto_principal(contamination=0.0, experiment_type="", experiment_year=
 
         print(f"Train {train_year} shape {df_train_set.shape}")
 
-        # Load a separate portion of train data to form the IID Split
-        iid_year_path = f"./datasets/Kyoto-2016_AnoShift/{ds_size}/{train_year}_{ds_size}_valid.parquet"
-        print("Loading IID subset from ", iid_year_path)
-        df_iid_year = pd.read_parquet(iid_year_path)
+        if int(train_year) > 2006:
+            # Load a separate portion of train data to form the IID Split
+            iid_year_path = f"./datasets/Kyoto-2016_AnoShift/{ds_size}/{train_year}_{ds_size}_valid.parquet"
+            print("Loading IID subset from ", iid_year_path)
+            df_iid_year = pd.read_parquet(iid_year_path)
 
-        df_iid_year.drop(columns=list(
-            (set(df_iid_year.columns) - set(cols))), inplace=True)
+            df_iid_year.drop(columns=list(
+                (set(df_iid_year.columns) - set(cols))), inplace=True)
 
-        df_iid = pd.concat([df_iid, df_iid_year])
-        del df_iid_year
+            df_iid = pd.concat([df_iid, df_iid_year])
+            del df_iid_year
 
     gc.collect()
     df_train = [(ret_train_ds_name, df_train_set)]
