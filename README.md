@@ -59,7 +59,8 @@ We provide numeros baselines in the `baselines/` directory, which are a good ent
 - `baseline_*.ipynb`: isoforest/ocsvm/LOF baselines on AnoShift
 - `baseline_deep_svdd/baseline_deepSVDD.ipynb`: deppSVDD baseline on AnoShift
 - `baseline_BERT_train.ipynb`, `baseline_BERT_eval.ipynb`: BERT model train and eval on AnoShift
-
+- `baseline_InternalContrastiveLearning.py`: InternalContrastiveLearning baseline on AnoShift
+- `baselines_PyOD.py`: ['ecod', 'copod', 'lunar', 'vae', 'so_gaal'] baselines on AnoShift using PyOD
 - `iid_finetune_distill_comparison.ipynb`: compare the IID, finetune and distillation training strategies for the BERT model, on AnoShift
 
 * run the notebooks from the `root` of the project: `jupyter-notebook .`
