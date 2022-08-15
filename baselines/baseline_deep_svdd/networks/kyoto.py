@@ -68,6 +68,7 @@ class Kyoto_Net_Autoencoder(BaseNet):
 
 
     def forward(self, x):
+        print("x", x.shape)
         x = self.encoder(x)
         x = self.decoder(x)
         x = torch.sigmoid(x)
