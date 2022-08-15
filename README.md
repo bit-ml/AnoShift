@@ -54,11 +54,14 @@ rm datasets/AnoShift.zip
 
 ## Notebooks
 
-There are several notebooks in the `notebooks/` directory which are a good entrypoint of familiarization with the protocol:
+We provide numeros baselines in the `baselines/` directory, which are a good entrypoint for familiarizing with the protocol:
 
-- `train_kyoto_bert`: trains an IID BERT model on a Kyoto-2006+ subset, then compares the finetune and distillation training regimes from the IID checkpoint on the next subset
-- `eval_kyoto_bert`: loads a Kyoto-2006+ subset, a pretrained tokenizer and pretrained BERT model and evaluates on subset
-- `baselines_kyoto_isoforest`: isoforest baseline on Kyoto-2006+
+- `baseline_*.ipynb`: isoforest/ocsvm/LOF baselines on AnoShift
+- `baseline_deep_svdd/baseline_deepSVDD.ipynb`: deppSVDD baseline on AnoShift
+- `baseline_BERT_train.ipynb`, `baseline_BERT_eval.ipynb`: BERT model train and eval on AnoShift
+
+- `iid_finetune_distill_comparison.ipynb`: compare the IID, finetune and distillation training strategies for the BERT model, on AnoShift
+
 * run the notebooks from the `root` of the project: `jupyter-notebook .`
 
 ## Please cite this project as:
