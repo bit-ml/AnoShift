@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 from base.base_net import BaseNet
 
-IN_SIZE = 570
+IN_SIZE = 571
 REP_DIM = 50
 class Kyoto_Net(BaseNet):
 
