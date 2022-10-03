@@ -71,7 +71,7 @@ We provide numeros baselines in the `baselines/` directory, which are a good ent
 @article{druagoi2022anoshift,
   title={AnoShift: A Distribution Shift Benchmark for Unsupervised Anomaly Detection},
   author={Dr{\u{a}}goi, Marius and Burceanu, Elena and Haller, Emanuela and Manolache, Andrei and Brad, Florin},
-  journal={arXiv preprint arXiv:2206.15476},
+  journal={Neural Information Processing Systems {NeurIPS}, Datasets and Benchmarks Track},
   year={2022}
 }
 ```
