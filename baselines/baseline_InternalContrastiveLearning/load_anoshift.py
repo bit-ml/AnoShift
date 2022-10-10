@@ -13,8 +13,6 @@ def load_train_year(anoshift_db_path, year):
     else:
         sys.exit(-1)
     df = df.reset_index(drop=True)
-    #df = df.dropna()
-    #df = df.reset_index(drop=True)
     return df
 
 def load_test_year(anoshift_db_path, year):
@@ -23,8 +21,6 @@ def load_test_year(anoshift_db_path, year):
     else:
         df = pd.read_parquet(os.path.join(anoshift_db_path, f'subset/{year}_subset.parquet'))
     df = df.reset_index(drop=True)
-    #df = df.dropna()
-    #df = df.reset_index(drop=True)
     return df 
 
 

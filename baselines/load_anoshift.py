@@ -86,7 +86,11 @@ def get_train(anoshift_db_path, train_data_percent=1):
         
     X_train_iso = X_train[num_cols].to_numpy()
 
-    return X_train_iso, ohe_enc
+    data_mean = X_train_iso.mean(0)[None,:]
+    data_std = X_train_iso.std(0)[None,:]
+    data_std[data_std==0] = 1
+
+    return X_train_iso, ohe_enc, data_mean, data_std
 
 def get_n_test_splits():
     return len(test_years)

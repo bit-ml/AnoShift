@@ -105,8 +105,7 @@ class trainer():
         #train = load_anoshift.get_ano_shift_train_data()
         train = torch.as_tensor(train, dtype=torch.float)
         print('Train size: ',train.shape)
-        #import pdb 
-        #pdb.set_trace()
+       
         #test = torch.as_tensor(test, dtype=torch.float)
         # all 0 gpu tensor for contrastloss 
        
@@ -208,8 +207,8 @@ class trainer():
             n_tests = load_anoshift.get_n_test_splits()
             for i in range(n_tests):
                 test, categories = load_anoshift.get_test(db_path, i, enc)
-                
-                print('Evaluate split %d'%ii)
+             
+                print('Evaluate split %d'%i)
                 print('split size: ',test.shape)
                 sys.stdout.flush()
                 test = torch.as_tensor(test, dtype=torch.float)
@@ -242,7 +241,7 @@ class trainer():
                         loss_test = criterion_test(scores_internal_test, correct_class).to(device)
                         test_losses_contrastloss[indexes] += loss_test.mean(dim=1).to(device)
        
-        
+                
                 test_losses_contrastloss = test_losses_contrastloss.cpu()  
                 # this is actually precision 
                 f1 = helper_functions.f1_calculator(categories, test_losses_contrastloss)
@@ -250,11 +249,11 @@ class trainer():
                 #test_losses_contrastloss = test_losses_contrastloss.cpu()
                
                 precision, recall, thresholds = precision_recall_curve(y_labels_boolean_modified, -test_losses_contrastloss)
-                pr_auc_out = auc(recall, precision) 
+                pr_auc_in = auc(recall, precision) 
                 precision, recall, thresholds = precision_recall_curve(1-y_labels_boolean_modified, test_losses_contrastloss)
-                pr_auc_in = auc(recall, precision)
+                pr_auc_out = auc(recall, precision)
                 roc_auc = roc_auc_score(y_labels_boolean_modified, -test_losses_contrastloss)
-                print('F1 -- %6.4f -- AUC %6.4f'%(f1, roc_auc))
+                print('F1 -- %6.4f -- ROC-AUC %6.4f'%(f1, roc_auc))
                 print('PR_AUC-IN -- %6.4f -- PR-AUC-OUT -- %6.4f'%(pr_auc_in, pr_auc_out))
                 sys.stdout.flush()
                 all_f1.append(f1)
