@@ -1,5 +1,6 @@
 # AnoShift
 
+Accepted at **NeurIPS 2022** - Datasets and Benchmarks Track
 - **Title**: AnoShift: A Distribution Shift Benchmark for Unsupervised Anomaly Detection
 - **Authors**: Marius Dragoi, Elena Burceanu, Emanuela Haller, Andrei Manolache, Florin Brad
 - **[ArXiv Preprint](https://arxiv.org/abs/2206.15476)**
