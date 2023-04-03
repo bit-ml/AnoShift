@@ -15,7 +15,6 @@ pyarrow==9.0.0
 scikit-learn==1.0.2
 scipy==1.8.0
 seaborn==0.11.2
-tensorboard==2.8.0
 tensorboard-data-server==0.6.1
 tensorboard-plugin-wit==1.8.1
 torch==1.12.1
@@ -25,3 +24,6 @@ torchvision==0.13.1
 tokenizers==0.12.1
 transformers==4.21.1
 protobuf==3.20.1
+pyod==1.0.9
+tensorflow==2.12.0
+tensorboard==2.12.0

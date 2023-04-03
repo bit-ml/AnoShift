@@ -36,7 +36,7 @@ def load_kyoto_principal(contamination=0.0, experiment_type="", experiment_year=
 
     cols = [str(i) for i in range(14)] + [label_col_name, ]
 
-    if experiment_type == "iid":
+    if experiment_type == "ood":
         train_st = 2006
         train_end = 2011
         train_years = [str(y)
@@ -51,6 +51,14 @@ def load_kyoto_principal(contamination=0.0, experiment_type="", experiment_year=
             int(experiment_year), int(experiment_year) + 1)]
         ret_train_ds_name = f"principal_{experiment_type}_{experiment_year}"
         test_years = range(2011, 2016)
+    elif experiment_type == "indistr":
+        train_years = [experiment_year,]
+        test_years = [experiment_year,]
+        ret_train_ds_name = f"indistr_{experiment_year}"
+    elif experiment_type == "indistr_full":
+        train_years = list(range(2006,2016))
+        test_years = list(range(2006,2016))
+        ret_train_ds_name = f"indistr_full"
 
     for train_year in train_years:
         train_year_path = f"./datasets/Kyoto-2016_AnoShift/{ds_size}/{train_year}_{ds_size}.parquet"
@@ -102,7 +110,10 @@ def load_kyoto_principal(contamination=0.0, experiment_type="", experiment_year=
 
     # Load the rest of the data as test sets (NEAR and FAR)
     for test_year in test_years:
-        test_year_path = f"./datasets/Kyoto-2016_AnoShift/{ds_size}/{test_year}_{ds_size}.parquet"
+        if experiment_type == "indistr" or experiment_type == "indistr_full":
+            test_year_path = f"./datasets/Kyoto-2016_AnoShift/{ds_size}/{test_year}_{ds_size}_valid.parquet"
+        else:
+            test_year_path = f"./datasets/Kyoto-2016_AnoShift/{ds_size}/{test_year}_{ds_size}.parquet"
         print("Loading test set:", test_year_path)
         df_test_year = pd.read_parquet(test_year_path)
         df_test_year.drop(columns=list(
@@ -110,7 +121,7 @@ def load_kyoto_principal(contamination=0.0, experiment_type="", experiment_year=
         df_test.append((test_year, df_test_year))
 
     gc.collect()
-    df_test = [('IID', df_iid), ] + df_test
+    df_test = df_test
 
     return df_train, df_test
 
@@ -119,7 +130,6 @@ def split_set(df, label_col_name, label_col_pos_val):
     """
     Splits a labeled dataframe in inlier and outlier subsets
     """
-
     df_inlier = df[df[label_col_name] == label_col_pos_val]
     df_outlier = df[df[label_col_name] != label_col_pos_val]
 

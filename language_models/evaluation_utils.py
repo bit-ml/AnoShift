@@ -62,7 +62,6 @@ def eval_rocauc_ds(model, ds_test_name, ds_test, bs_eval, tokenizer):
     y_true = []
     y_scores_ids = {}
 
-    print(ds_test)
     for cls in ds_test.keys():
         ds_cls = ds_test[cls]
         num_steps = max(ds_cls.shape[0] // bs_eval - 1, 1)

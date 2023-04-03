@@ -45,8 +45,8 @@ parser.add_argument(
     "--experiment_type",
     type=str,
     help="experiment type",
-    default="iid",
-    choices=["iid", "finetune", "distil", ],
+    default="ood",
+    choices=["ood", "finetune", "distil", "indistr", "indistr_full"],
 )
 
 
@@ -70,7 +70,7 @@ parser.add_argument(
     "--random_seed",
     type=int,
     help="percent of outliers in train data",
-    default=42,
+    default=46,
 )
 
 
@@ -218,7 +218,7 @@ for df_train in dfs_train:
 print("Model will be saved to: ", save_model_path)
 
 
-def iid_experiment():
+def ood_experiment():
     print("Configuring tokenizer")
     tokenizer, vocab_size = configure_tokenizer(
         byte_level_tokenization=byte_level_tokenization,
@@ -284,7 +284,7 @@ def finetune_experiment():
     and so on.
     """
     if experiment_year == '2006':
-        return iid_experiment()
+        return ood_experiment()
 
     print("Configuring tokenizer")
     tokenizer, vocab_size = configure_tokenizer(
@@ -344,7 +344,7 @@ def distil_experiment():
     and so on.
     """
     if experiment_year == '2006':
-        return iid_experiment()
+        return ood_experiment()
 
     student_dfs_train = dfs_train
     _, df_train = student_dfs_train[0]
@@ -396,8 +396,8 @@ def distil_experiment():
 
 
 if __name__ == "__main__":
-    if experiment_type == "iid":
-        iid_experiment()
+    if experiment_type == "ood" or "indistr" in experiment_type:
+        ood_experiment()
     elif experiment_type == "finetune":
         finetune_experiment()
     elif experiment_type == "distil":
