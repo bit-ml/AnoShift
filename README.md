@@ -5,7 +5,7 @@ Accepted at **NeurIPS 2022** - Datasets and Benchmarks Track
 - **Authors**: Marius Dragoi, Elena Burceanu, Emanuela Haller, Andrei Manolache, Florin Brad
 - **[ArXiv Preprint](https://arxiv.org/abs/2206.15476)**
 
-### :boom::boom: AD benchmark for both In-Distribution (ID) and Out-Of-Distribution (OOD) Anomaly Detection tasks ([full results](https://github.com/emanuelahaller/AnoShift_Tmp/blob/main/full_results_OOD_and_ID.pdf)) 
+### :boom::boom: AD benchmark for both In-Distribution (ID) and Out-Of-Distribution (OOD) Anomaly Detection tasks ([full results](https://github.com/bit-ml/AnoShift/blob/main/full_results_OOD_and_ID.pdf)) 
 
 
   
