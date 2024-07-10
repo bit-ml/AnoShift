@@ -178,11 +178,11 @@ Accepted at **NeurIPS 2022** - Datasets and Benchmarks Track
 
 - Original Kyoto-2006+ data available at: https://www.takakura.com/Kyoto_data/ (in AnoShift we used the New data (Nov. 01, 2006 - Dec. 31, 2015))
 
-- Preprocessed Kyoto-2006+ data available at: https://share.bitdefender.com/s/9D4bBE7H8XTdYDB
+- Preprocessed Kyoto-2006+ data available at: https://storage.googleapis.com/bitdefender_ml_artifacts/anoshift/Kyoto-2016_AnoShift.tar
 
 - The result is obtained by applying the preprocessing script `data_processor/parse_kyoto_logbins.py` to the original data.
 
-- The preprocessed dataset is available in pandas parquet format and available as both [full sets](https://share.bitdefender.com/s/9D4bBE7H8XTdYDB?path=%2Ffull) and [subsets](https://share.bitdefender.com/s/9D4bBE7H8XTdYDB?path=%2Fsubset) with 300k inlier samples, with equal outlier proportions to the original data.
+- The preprocessed dataset is available in pandas parquet format and available as both `full sets` and `subsets` with 300k inlier samples, with equal outlier proportions to the original data.
 
 - In the notebook tutorials, we use the subsets for fast experimentation. In our experiments, the subset results are consistent with the full sets.
 
@@ -191,7 +191,7 @@ Accepted at **NeurIPS 2022** - Datasets and Benchmarks Track
 ## Prepare data
 
 ```
-curl https://share.bitdefender.com/s/9D4bBE7H8XTdYDB/download --output AnoShift.zip
+curl https://storage.googleapis.com/bitdefender_ml_artifacts/anoshift/Kyoto-2016_AnoShift.tar --output AnoShift.zip
 
 mkdir datasets
 
